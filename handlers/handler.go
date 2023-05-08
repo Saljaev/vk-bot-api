@@ -94,75 +94,75 @@ func LongPollHandler() {
 						panic(err)
 					}
 				}
+				if (update.Object.Message.Text == "Рассчитать" || update.Object.Message.Text == "рассчитать") && update.Object.Message.Payload != "{\"button\":\"calculate\"}" {
+					SendMessage(update.Object.Message.FromID, "Введите ваш возраст", models.Keyboard{})
+					pfc = CreateZeroStruct(update.Object.Message.FromID, false)
+					pfc.WaitingForAge = true
+				} else {
+					if pfc.WaitingForAge && update.Object.Message.Payload == "" {
+						age, err := strconv.Atoi(update.Object.Message.Text)
+						if err != nil || age < 1 || age > 150 {
+							SendMessage(update.Object.Message.FromID, "Пожалуйста, введите возраст корректно", models.Keyboard{})
+						} else {
+							SendMessage(update.Object.Message.FromID, "Введите ваш рост в см", models.Keyboard{})
+							pfc.Age = age
+							pfc.WaitingForAge = false
+							pfc.WaitingForHeight = true
+						}
 
-				if update.Object.Message.Payload == "" && !pfc.WaitingForAge && !pfc.WaitingForHeight && !pfc.WaitingForWeight && !pfc.WaitingForSex && !pfc.WaitingForActivity {
-					SendMessage(update.Object.Message.FromID, "Я умею считать КБЖУ, если хотите посчитать напишите Рассчитать или нажмите кнопку снизу", keyboards.KeyCalculate())
+					} else if pfc.WaitingForHeight && update.Object.Message.Payload == "" {
+						height, err := strconv.Atoi(update.Object.Message.Text)
+						if err != nil || height < 10 || height > 300 {
+							SendMessage(update.Object.Message.FromID, "Пожалуйста, введите рост корректно", models.Keyboard{})
+						} else {
+							SendMessage(update.Object.Message.FromID, "Введите ваш вес в кг", models.Keyboard{})
+							pfc.Height = height
+							pfc.WaitingForHeight = false
+							pfc.WaitingForWeight = true
+						}
+					} else if pfc.WaitingForWeight && update.Object.Message.Payload == "" {
+						weight, err := strconv.Atoi(update.Object.Message.Text)
+						if err != nil || weight < 0 || weight > 300 {
+							SendMessage(update.Object.Message.FromID, "Пожалуйста, введите вес корректно", models.Keyboard{})
+						} else {
+							SendMessage(update.Object.Message.FromID, "Укажите ваш пол", keyboards.KeySex())
+							pfc.Weight = weight
+							pfc.WaitingForWeight = false
+							pfc.WaitingForSex = true
+						}
+					} else if pfc.WaitingForSex && update.Object.Message.Payload == "" {
+						if update.Object.Message.Payload == "" {
+							SendMessage(update.Object.Message.FromID, "Пожалуйста, укажите пол", models.Keyboard{})
+						} else {
+							pfc.WaitingForSex = false
+							pfc.WaitingForActivity = true
+						}
+					} else if pfc.WaitingForActivity && update.Object.Message.Payload == "" {
+						if update.Object.Message.Payload == "" {
+							SendMessage(update.Object.Message.FromID, "Пожалуйста, выберите вашу активность", models.Keyboard{})
+						} else {
+							pfc.WaitingForActivity = false
+						}
+					}
 				}
-
-				if pfc.WaitingForAge {
-					age, err := strconv.Atoi(update.Object.Message.Text)
-					if err != nil {
-						SendMessage(update.Object.Message.FromID, "Пожалуйста, введите возраст корректно", models.Keyboard{})
-					}
-					SendMessage(update.Object.Message.FromID, "Введите ваш рост", models.Keyboard{})
-					pfc.Age = age
-					pfc.WaitingForAge = false
-					pfc.WaitingForHeight = true
-				} else if pfc.WaitingForHeight {
-					height, err := strconv.Atoi(update.Object.Message.Text)
-					if err != nil {
-						SendMessage(update.Object.Message.FromID, "Пожалуйста, введите возраст корректно", models.Keyboard{})
-					}
-					SendMessage(update.Object.Message.FromID, "Введите ваш вес", models.Keyboard{})
-					pfc.Height = height
-					pfc.WaitingForHeight = false
-					pfc.WaitingForWeight = true
-				} else if pfc.WaitingForWeight {
-					weight, err := strconv.Atoi(update.Object.Message.Text)
-					if err != nil {
-						SendMessage(update.Object.Message.FromID, "Пожалуйста, введите возраст корректно", models.Keyboard{})
-					}
-					SendMessage(update.Object.Message.FromID, "Укажите ваш пол", keyboards.KeySex())
-
-					pfc.Weight = weight
-					pfc.WaitingForWeight = false
-					pfc.WaitingForSex = true
-				} else if pfc.WaitingForSex {
-					if update.Object.Message.Payload == "" {
-						SendMessage(update.Object.Message.FromID, "Пожалуйста, укажите пол", models.Keyboard{})
-					} else {
-						pfc.WaitingForSex = false
-						pfc.WaitingForActivity = true
-					}
-				} else if pfc.WaitingForActivity {
-					if update.Object.Message.Payload == "" {
-						SendMessage(update.Object.Message.FromID, "Пожалуйста, выберите вашу активность", models.Keyboard{})
-					} else {
-						pfc.WaitingForActivity = false
-					}
-				}
-
 				switch update.Object.Message.Payload {
 				case "{\"button\":\"lost\"}":
 					pfc.Protein = int(float64(pfc.Calories) * 0.25 / 4)
 					pfc.Fats = int(float64(pfc.Calories) * 0.25 / 9)
 					pfc.Carbohydrates = int(float64(pfc.Calories) * 0.4 / 4)
-					SendMessage(update.Object.Message.FromID, fmt.Sprintf("Для сохранения вам следует съедать\nБелка: %d грамм\nЖиров: %d грамм\nУглеводов: %d грамм", pfc.Protein, pfc.Fats, pfc.Carbohydrates), models.Keyboard{})
-					pfc = CreateZeroStruct(update.Object.Message.FromID, false)
+					SendMessage(update.Object.Message.FromID, fmt.Sprintf("Для похудения вам следует съедать\nБелка: %d грамм\nЖиров: %d грамм\nУглеводов: %d грамм", pfc.Protein, pfc.Fats, pfc.Carbohydrates), keyboards.KeyRepeat())
 
 				case "{\"button\":\"stay\"}":
 					pfc.Protein = int(float64(pfc.Calories) * 0.3 / 4)
 					pfc.Fats = int(float64(pfc.Calories) * 0.3 / 9)
 					pfc.Carbohydrates = int(float64(pfc.Calories) * 0.4 / 4)
-					SendMessage(update.Object.Message.FromID, fmt.Sprintf("Для сохранения вам следует съедать\nБелка: %d грамм\nЖиров: %d грамм\nУглеводов: %d грамм", pfc.Protein, pfc.Fats, pfc.Carbohydrates), models.Keyboard{})
-					pfc = CreateZeroStruct(update.Object.Message.FromID, false)
+					SendMessage(update.Object.Message.FromID, fmt.Sprintf("Для сохранения вам следует съедать\nБелка: %d грамм\nЖиров: %d грамм\nУглеводов: %d грамм", pfc.Protein, pfc.Fats, pfc.Carbohydrates), keyboards.KeyRepeat())
 
 				case "{\"button\":\"gain\"}":
 					pfc.Protein = int(float64(pfc.Calories) * 0.35 / 4)
 					pfc.Fats = int(float64(pfc.Calories) * 0.3 / 9)
 					pfc.Carbohydrates = int(float64(pfc.Calories) * 0.55 / 4)
-					SendMessage(update.Object.Message.FromID, fmt.Sprintf("Для сохранения вам следует съедать\nБелка: %d грамм\nЖиров: %d грамм\nУглеводов: %d грамм", pfc.Protein, pfc.Fats, pfc.Carbohydrates), models.Keyboard{})
-					pfc = CreateZeroStruct(update.Object.Message.FromID, false)
+					SendMessage(update.Object.Message.FromID, fmt.Sprintf("Для набора вам следует съедать\nБелка: %d грамм\nЖиров: %d грамм\nУглеводов: %d грамм", pfc.Protein, pfc.Fats, pfc.Carbohydrates), keyboards.KeyRepeat())
 
 				case "{\"button\":\"check\"}":
 					var calories float64
@@ -173,7 +173,7 @@ func LongPollHandler() {
 					}
 					pfc.Calories = int(calories)
 					SendMessage(update.Object.Message.FromID, fmt.Sprintf("Ваша суточная норма калорий: %d ккал", pfc.Calories), models.Keyboard{})
-					SendMessage(update.Object.Message.FromID, "Хотите ли вы узнать КБЖУ для таких каллорий?", keyboards.KeyYesRej())
+					SendMessage(update.Object.Message.FromID, "Хотите ли вы узнать БЖУ для таких каллорий?", keyboards.KeyYesRej())
 
 				case "{\"button\":\"want\"}":
 					SendMessage(update.Object.Message.FromID, "Отлично, выберите желаемую цель", keyboards.KeyGoal())
@@ -254,11 +254,6 @@ func LongPollHandler() {
 					pfc.WaitingForAge = true
 				default:
 					break
-				}
-
-				if (update.Object.Message.Text == "Рассчитать" || update.Object.Message.Text == "рассчитать") && update.Object.Message.Payload != "{\"button\":\"calculate\"}" {
-					SendMessage(update.Object.Message.FromID, "Введите ваш возраст", models.Keyboard{})
-					pfc.WaitingForAge = true
 				}
 
 				err = database.UpdatePFC(db, pfc)

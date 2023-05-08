@@ -238,3 +238,26 @@ func KeyCalculate() models.Keyboard {
 	}
 	return key
 }
+
+func KeyRepeat() models.Keyboard {
+	key := models.Keyboard{
+		OneTime: true,
+		Buttons: [][]models.Button{
+			{
+				{
+					Action: struct {
+						Type    string `json:"type"`
+						Payload string `json:"payload,omitempty"`
+						Label   string `json:"label"`
+					}{
+						Type:    "text",
+						Payload: "{\"button\":\"repeat\"}",
+						Label:   "Рассчитать ещё раз",
+					},
+					Color: "positive",
+				},
+			},
+		},
+	}
+	return key
+}
