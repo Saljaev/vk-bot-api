@@ -1,17 +1,13 @@
 package keyboards
 
-import (
-	"go/model"
-)
+import "go/models"
 
-model
-
-func keyYesRej() model.Keyboard {
-	key := keyboard{
+func KeyYesRej() models.Keyboard {
+	key := models.Keyboard{
 		OneTime: true,
-		Buttons: [][]button{
-			[]button{
-				button{
+		Buttons: [][]models.Button{
+			{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -24,8 +20,8 @@ func keyYesRej() model.Keyboard {
 					Color: "positive",
 				},
 			},
-			[]button{
-				button{
+			{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -43,12 +39,12 @@ func keyYesRej() model.Keyboard {
 	return key
 }
 
-func keySex() keyboard {
-	key := keyboard{
+func KeySex() models.Keyboard {
+	key := models.Keyboard{
 		Inline: true,
-		Buttons: [][]button{
-			[]button{
-				button{
+		Buttons: [][]models.Button{
+			{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -59,7 +55,7 @@ func keySex() keyboard {
 						Label:   "Мужской",
 					},
 				},
-				button{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -76,12 +72,12 @@ func keySex() keyboard {
 	return key
 }
 
-func keyActivity() keyboard {
-	key := keyboard{
+func KeyActivity() models.Keyboard {
+	key := models.Keyboard{
 		Inline: true,
-		Buttons: [][]button{
-			[]button{
-				button{
+		Buttons: [][]models.Button{
+			{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -93,8 +89,8 @@ func keyActivity() keyboard {
 					},
 				},
 			},
-			[]button{
-				button{
+			{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -106,8 +102,8 @@ func keyActivity() keyboard {
 					},
 				},
 			},
-			[]button{
-				button{
+			{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -119,8 +115,8 @@ func keyActivity() keyboard {
 					},
 				},
 			},
-			[]button{
-				button{
+			{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -137,12 +133,12 @@ func keyActivity() keyboard {
 	return key
 }
 
-func keyGoat() keyboard {
-	key := keyboard{
+func KeyGoal() models.Keyboard {
+	key := models.Keyboard{
 		Inline: true,
-		Buttons: [][]button{
-			[]button{
-				button{
+		Buttons: [][]models.Button{
+			{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -154,8 +150,8 @@ func keyGoat() keyboard {
 					},
 				},
 			},
-			[]button{
-				button{
+			{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -167,8 +163,8 @@ func keyGoat() keyboard {
 					},
 				},
 			},
-			[]button{
-				button{
+			{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -185,12 +181,12 @@ func keyGoat() keyboard {
 	return key
 }
 
-func keyCheck() keyboard {
-	key := keyboard{
+func KeyCheck() models.Keyboard {
+	key := models.Keyboard{
 		Inline: true,
-		Buttons: [][]button{
-			[]button{
-				button{
+		Buttons: [][]models.Button{
+			{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -202,7 +198,7 @@ func keyCheck() keyboard {
 					},
 					Color: "positive",
 				},
-				button{
+				models.Button{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
@@ -220,12 +216,12 @@ func keyCheck() keyboard {
 	return key
 }
 
-func keyCalculate() keyboard {
-	key := keyboard{
+func KeyCalculate() models.Keyboard {
+	key := models.Keyboard{
 		OneTime: true,
-		Buttons: [][]button{
-			[]button{
-				button{
+		Buttons: [][]models.Button{
+			{
+				{
 					Action: struct {
 						Type    string `json:"type"`
 						Payload string `json:"payload,omitempty"`
