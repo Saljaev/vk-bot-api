@@ -13,6 +13,6 @@ The goal was to create a bot using the minimum amount of external libraries.
 ## Screenshots
 <div>
   <img src="./images/screen1.png" alt="First screen" style="margin-right: 20px;">
-  <img src="./images/screen2.png" alt="Second screen" style="margin-bottom: 100px;">
+  <img src="./images/screen2.png" alt="Second screen">
 </div>
 

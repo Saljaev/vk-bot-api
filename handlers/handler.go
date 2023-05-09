@@ -98,6 +98,8 @@ func LongPollHandler() {
 					SendMessage(update.Object.Message.FromID, "Введите ваш возраст", models.Keyboard{})
 					pfc = CreateZeroStruct(update.Object.Message.FromID, false)
 					pfc.WaitingForAge = true
+				} else if update.Object.Message.Payload == "" && !pfc.WaitingForAge && !pfc.WaitingForHeight && !pfc.WaitingForWeight && !pfc.WaitingForSex && !pfc.WaitingForActivity {
+					SendMessage(update.Object.Message.FromID, "Я умею считать БЖУ, если хотите посчитать напишите Рассчитать или нажмите кнопку снизу", keyboards.KeyCalculate())
 				} else {
 					if pfc.WaitingForAge && update.Object.Message.Payload == "" {
 						age, err := strconv.Atoi(update.Object.Message.Text)
@@ -224,7 +226,7 @@ func LongPollHandler() {
 					} else {
 						SendMessage(update.Object.Message.FromID, "Вы уже выбрали пол", models.Keyboard{})
 					}
-
+					pfc.WaitingForSex = false
 				case "{\"button\":\"female\"}":
 					if pfc.Sex == "" {
 						SendMessage(update.Object.Message.FromID, "Укажите вашу активность", keyboards.KeyActivity())
@@ -232,7 +234,7 @@ func LongPollHandler() {
 					} else {
 						SendMessage(update.Object.Message.FromID, "Вы уже выбрали пол", models.Keyboard{})
 					}
-
+					pfc.WaitingForSex = false
 				case "{\"button\":\"calculate\"}":
 					pfc = CreateZeroStruct(update.Object.Message.FromID, false)
 					if err != nil {
